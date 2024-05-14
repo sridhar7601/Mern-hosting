@@ -5,4 +5,4 @@ RUN echo "$PWD"
 RUN npm install
 COPY ./server/ . 
 EXPOSE 4000
-CMD ["cd","server","&&","npm","run","start"]
+CMD ["npm","run","start"]
