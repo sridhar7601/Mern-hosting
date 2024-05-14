@@ -1,29 +1,28 @@
 name: Deploy Node Application
 
 on:
-   push:
-      branches:
-          -main
+  push:
+    branches:
+      - main
 
 jobs:
-   build:
-      runs-on:ubuntu-latest
-      steps:
-        -name: Checkout Source
-         uses: actions/checkout@4
-        -name: Login to Dockerhub
-          run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
-        -name: Build Docker image
-          run: docler build -t sridzar007/node-app .
-        -name: Publish image to docker hud
-          run: docker push sridzar007/node-app:latest
-   deploy:
-     needs: build
-     runs-on: self-hosted
-     steps:
-        -name: pull image from docker pull
-          run: docker pull sridzar007/node-app:latest
-        -name: Run docker container
-          run: docker run -d -p 4000:4000 --name nodejs-app-container -e MONGO_PASSWORD='${{secrets.MONGO_PASSWORD}}' sridzar007/node-app:latest
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+      - name: Login to Dockerhub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build Docker image
+        run: docker build -t sridzar007/node-app .
+      - name: Publish image to Docker Hub
+        run: docker push sridzar007/node-app:latest
 
-    
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull image from Docker Hub
+        run: docker pull sridzar007/node-app:latest
+      - name: Run Docker container
+        run: docker run -d -p 4000:4000 --name nodejs-app-container -e MONGO_PASSWORD='${{ secrets.MONGO_PASSWORD }}' sridzar007/node-app:latest
