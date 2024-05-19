@@ -8,7 +8,7 @@ app.use(cors())
 
 mongoose.connect(
   "mongodb+srv://sridhar:sridhar@cluster0.03add.mongodb.net/mernlearning?retryWrites=true&w=majority&appName=Cluster0"
-);
+).;
 
 app.get("/", (req, res) => {
   Usermodel.find({}).then((result, err) => {
